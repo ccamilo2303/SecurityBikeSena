@@ -1,0 +1,14 @@
+server:
+    port: 8081
+
+spring:
+  application:
+    name: BikeFinder
+  datasource:
+    jdbc-url: jdbc:sqlserver://bikerfinder.mssql.somee.com;databaseName=bikerfinder
+    username: ccamilo2303_SQLLogin_1
+    password: xz2xkybsbl
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      maximum-pool-size: 20
+      connection-timeout: 7000
