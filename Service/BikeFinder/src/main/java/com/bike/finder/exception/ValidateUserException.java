@@ -1,11 +1,10 @@
 package com.bike.finder.exception;
-/**
- * @author Cristian Camilo Beltrán <ccamilo2303@gmail.com>
- * @since  8 oct. 2020
- */
-public class ValidateUserException extends Exception {
 
-	
+public class ValidateUserException extends CreateUserException{
+
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	
 
@@ -24,6 +23,5 @@ public class ValidateUserException extends Exception {
 	public ValidateUserException(Throwable cause) {
 		super(cause);
 	}
-
 
 }

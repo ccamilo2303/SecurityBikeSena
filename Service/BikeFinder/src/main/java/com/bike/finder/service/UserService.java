@@ -9,7 +9,7 @@ import com.bike.finder.dao.UserDao;
 import com.bike.finder.dto.UserCreateDto;
 import com.bike.finder.dto.UserValidateDto;
 import com.bike.finder.exception.CreateUserException;
-import com.bike.finder.exception.ValidateUserException;
+import com.bike.finder.exception.ValidateUserLoginException;
 
 /**
  * @author Cristian Camilo Beltrán <ccamilo2303@gmail.com>
@@ -27,8 +27,8 @@ public class UserService {
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRED, rollbackForClassName = { "Exception" })
-	public void validateUser(UserValidateDto userValidateDto) throws ValidateUserException{
-		
+	public void validateUser(UserValidateDto userValidateDto) throws ValidateUserLoginException{
+		userDao.validateExistUserLogin(userValidateDto);
 	}
 	
 }

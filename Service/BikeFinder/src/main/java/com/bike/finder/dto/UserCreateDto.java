@@ -11,7 +11,6 @@ public class UserCreateDto {
 	private int celular;
 	private String pass;
 	private BikeDto bike;
-	private GpsDto gps;
 	
 	public String getNombres() {
 		return nombres;
@@ -49,18 +48,11 @@ public class UserCreateDto {
 	public void setBike(BikeDto bike) {
 		this.bike = bike;
 	}
-	public GpsDto getGps() {
-		return gps;
-	}
-	public void setGps(GpsDto gps) {
-		this.gps = gps;
-	}
-	
+
 	@Override
 	public String toString() {
 		return "UserCreateDto [nombres=" + nombres + ", apellidos=" + apellidos + ", email=" + email + ", celular="
-				+ celular + ", pass=" + pass + ", bike=" + bike + ", gps=" + gps + "]";
+				+ celular + ", pass=" + pass + ", bike=" + bike + "]";
 	}
-
 	
 }
