@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,18 +36,23 @@ public class UserController {
 			return new ResponseDto(HttpStatus.OK, "Ok");
 		}catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage().replace("com.bike.finder.exception.ValidateUserException:", "").replace("com.bike.finder.exception.ValidateUserLoginException:", ""));
 		}
 	}
 	
-	@GetMapping
-	public ResponseDto validateUser(@RequestBody UserValidateDto userValidateDto) {
+	@GetMapping("/{email}/{pass}")
+	public ResponseDto validateUser(@PathVariable("email")String email, @PathVariable("pass")String pass) {
 		try {
+			System.out.println("MEIAL : "+email);
+			System.out.println("pass : "+pass);
+			UserValidateDto userValidateDto = new UserValidateDto();
+			userValidateDto.setEmail(email);
+			userValidateDto.setPass(pass);
 			userService.validateUser(userValidateDto);
 			return new ResponseDto(HttpStatus.OK, "Ok");
 		}catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage().replace("com.bike.finder.exception.ValidateUserLoginException:", ""));
 		}
 	}
 	

@@ -85,7 +85,7 @@ public class UserDao implements UserDaoInterface{
 			Map<String, String> paramMap = new HashMap<String, String>();
 			paramMap.put("email", userValidateDto.getEmail());
 			paramMap.put("pass", userValidateDto.getPass());
-			
+			System.out.println(paramMap);
 			Integer c = namedParameterJdbcTemplateOne.queryForObject(sql, paramMap, Integer.class);
 			
 			if(c == 0)
@@ -110,7 +110,7 @@ public class UserDao implements UserDaoInterface{
 			Integer c = namedParameterJdbcTemplateOne.queryForObject(sql, paramMap, Integer.class);
 			
 			if(c > 0)
-				throw new ValidateUserLoginException("El usuario está registrado");
+				throw new ValidateUserLoginException("El email ya se encuentra registrado");
 
 		} catch (Exception e) {
 			throw new ValidateUserException(e);

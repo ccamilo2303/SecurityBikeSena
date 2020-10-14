@@ -8,7 +8,7 @@ public class UserCreateDto {
 	private String nombres;
 	private String apellidos;
 	private String email;
-	private int celular;
+	private long celular;
 	private String pass;
 	private BikeDto bike;
 	
@@ -30,10 +30,10 @@ public class UserCreateDto {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public int getCelular() {
+	public long getCelular() {
 		return celular;
 	}
-	public void setCelular(int celular) {
+	public void setCelular(long celular) {
 		this.celular = celular;
 	}
 	public String getPass() {
