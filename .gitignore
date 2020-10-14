@@ -1,0 +1,13 @@
+App/node_modules/**/*
+App/.expo/*
+App/npm-debug.*
+App/*.jks
+App/*.p8
+App/*.p12
+App/*.key
+App/*.mobileprovision
+App/*.orig.*
+App/web-build/
+
+# macOS
+App/.DS_Store

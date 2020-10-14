@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "SecurityBikeApp2",
+    "slug": "SecurityBikeApp2",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "android": {
+      "config":{
+        "googleMaps":{
+          "apiKey":"AIzaSyACATJ4s2LtoRc_Z9Mq8Ojk5hwBsfL8DBA"
+        }
+      }
+    }
+  }
+}
