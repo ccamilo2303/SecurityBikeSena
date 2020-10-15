@@ -12,6 +12,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.bike.finder.dto.UserCreateDto;
+import com.bike.finder.dto.UserUpdateDto;
 import com.bike.finder.dto.UserValidateDto;
 import com.bike.finder.exception.CreateUserException;
 import com.bike.finder.exception.ValidateUserException;
@@ -24,10 +25,10 @@ import com.bike.finder.exception.ValidateUserLoginException;
 public class UserDao implements UserDaoInterface{
 
 	@Autowired
-    @Qualifier("datasourcePrimary")
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplateOne;
+	@Qualifier("datasourcePrimary")
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplateOne;
 
-	
+
 	@Override
 	public void createUser(UserCreateDto userDto) throws CreateUserException{
 
@@ -35,9 +36,9 @@ public class UserDao implements UserDaoInterface{
 		Long idBicicleta = null;
 		Long idGps = null;
 		try {
-			
-			validateExistUser(userDto.getEmail());
-			
+
+			validateExistUser(userDto.getEmail(), true);
+
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 			String sql = "insert into Usuarios values(:nombres, :apellidos, :email, :celular, :pass, GETDATE());";
 
@@ -45,8 +46,8 @@ public class UserDao implements UserDaoInterface{
 					new String[] { "ID_Usuario" });
 
 			idUser = keyHolder.getKey() != null ? keyHolder.getKey().longValue() : null;
-			
-			
+
+
 			sql = "insert into Bicicleta values(:marca, :referencia, :color, :foto);";
 
 			namedParameterJdbcTemplateOne.update(sql, new BeanPropertySqlParameterSource(userDto.getBike()), keyHolder,
@@ -54,7 +55,7 @@ public class UserDao implements UserDaoInterface{
 
 			idBicicleta = keyHolder.getKey() != null ? keyHolder.getKey().longValue() : null;
 
-			
+
 			sql = "insert into GPS values(GETDATE());";
 
 			namedParameterJdbcTemplateOne.update(sql, new BeanPropertySqlParameterSource(new Object()), keyHolder,
@@ -62,24 +63,24 @@ public class UserDao implements UserDaoInterface{
 
 			idGps = keyHolder.getKey() != null ? keyHolder.getKey().longValue() : null;
 
-			
+
 			sql = "insert into Usuario_GPS_Bicicleta values("+idUser+", "+idBicicleta+", "+idGps+");";
 
 			namedParameterJdbcTemplateOne.update(sql, new BeanPropertySqlParameterSource(new Object()));
-			
+
 
 		} catch (Exception e) {
 			throw new CreateUserException(e);
 		}
-		
-		
+
+
 	}
 
 
 	@Override
 	public void validateExistUserLogin(UserValidateDto userValidateDto) throws ValidateUserLoginException {
-		
-		
+
+
 		try {
 			String sql = "select count(*) from Usuarios where email = :email and clave = :pass";
 			Map<String, String> paramMap = new HashMap<String, String>();
@@ -87,35 +88,54 @@ public class UserDao implements UserDaoInterface{
 			paramMap.put("pass", userValidateDto.getPass());
 			System.out.println(paramMap);
 			Integer c = namedParameterJdbcTemplateOne.queryForObject(sql, paramMap, Integer.class);
-			
+
 			if(c == 0)
 				throw new ValidateUserLoginException("El usuario o contraseña son incorrectos");
 
 		} catch (Exception e) {
 			throw new ValidateUserLoginException(e);
 		}
-		
-		
+
+
 	}
 
 
 	@Override
-	public void validateExistUser(String email) throws ValidateUserException {
-		
+	public void validateExistUser(String email, boolean validate) throws ValidateUserException {
+
 
 		try {
 			String sql = "select count(*) from Usuarios where email = :email";
 			Map<String, String> paramMap = new HashMap<String, String>();
 			paramMap.put("email", email);
 			Integer c = namedParameterJdbcTemplateOne.queryForObject(sql, paramMap, Integer.class);
-			
-			if(c > 0)
+
+			if(c > 0 && validate == true)
 				throw new ValidateUserLoginException("El email ya se encuentra registrado");
+			if(c == 0 && validate == false)
+				throw new ValidateUserLoginException("El email no se encuentra registrado");
 
 		} catch (Exception e) {
 			throw new ValidateUserException(e);
 		}
-		
+
 	}
-	
+
+
+	@Override
+	public void updatePass(UserUpdateDto userDto) throws CreateUserException {
+		try {
+			validateExistUser(userDto.getEmail(), false);
+			
+			String sql = "update Usuarios set clave = :pass where email = :email";
+			Map<String, String> paramMap = new HashMap<String, String>();
+			paramMap.put("pass", userDto.getPass());
+			paramMap.put("email", userDto.getEmail());
+			namedParameterJdbcTemplateOne.update(sql, paramMap);
+			
+		} catch (Exception e) {
+			throw new CreateUserException(e);
+		}
+	}
+
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bike.finder.dto.ResponseDto;
 import com.bike.finder.dto.UserCreateDto;
+import com.bike.finder.dto.UserUpdateDto;
 import com.bike.finder.dto.UserValidateDto;
 import com.bike.finder.service.UserService;
 
@@ -56,5 +58,15 @@ public class UserController {
 		}
 	}
 	
+	@PutMapping
+	public ResponseDto updatePass(@RequestBody UserUpdateDto userUpdate) {
+		try {
+			userService.updatePass(userUpdate);
+			return new ResponseDto(HttpStatus.OK, "Ok");
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage().replace("com.bike.finder.exception.ValidateUserException:", "").replace("com.bike.finder.exception.ValidateUserLoginException:", ""));
+		}
+	}
 	
 }

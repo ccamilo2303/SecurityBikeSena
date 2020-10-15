@@ -1,6 +1,7 @@
 package com.bike.finder.dao;
 
 import com.bike.finder.dto.UserCreateDto;
+import com.bike.finder.dto.UserUpdateDto;
 import com.bike.finder.dto.UserValidateDto;
 import com.bike.finder.exception.CreateUserException;
 import com.bike.finder.exception.ValidateUserException;
@@ -26,8 +27,16 @@ public interface UserDaoInterface {
 	
 	/**
 	 * @param email
-	 * @throws ValidateUserLoginException
+	 * @param validate
+	 * @throws ValidateUserException
 	 */
-	public void validateExistUser(String email) throws ValidateUserException;
+	public void validateExistUser(String email, boolean validate) throws ValidateUserException;
+	
+	
+	/**
+	 * @param userDto
+	 * @throws CreateUserException
+	 */
+	public void updatePass(UserUpdateDto userDto) throws CreateUserException;
 	
 }

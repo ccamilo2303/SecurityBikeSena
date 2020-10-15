@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bike.finder.dao.UserDao;
 import com.bike.finder.dto.UserCreateDto;
+import com.bike.finder.dto.UserUpdateDto;
 import com.bike.finder.dto.UserValidateDto;
 import com.bike.finder.exception.CreateUserException;
 import com.bike.finder.exception.ValidateUserLoginException;
@@ -29,6 +30,11 @@ public class UserService {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackForClassName = { "Exception" })
 	public void validateUser(UserValidateDto userValidateDto) throws ValidateUserLoginException{
 		userDao.validateExistUserLogin(userValidateDto);
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRED, rollbackForClassName = { "Exception" })
+	public void updatePass(UserUpdateDto userUpdate) throws CreateUserException{
+		userDao.updatePass(userUpdate);
 	}
 	
 }
