@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./Login";
 import Registro from "./Registro";
 import Mapa from "./Mapa";
+import RecuperarPass from "./RecuperarPass";
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,20 @@ function App() {
             headerTintColor: "#fff"
           }}
         />
+
+        <Stack.Screen
+          name="RecuperarPass"
+          component={RecuperarPass}
+          options={{
+            title: "Atrás",
+            headerStyle: {
+              backgroundColor: "#09a7b5",
+            },
+            headerTintColor: "#fff"
+          }}
+        />
+
+
       </Stack.Navigator>
     </NavigationContainer>
   );

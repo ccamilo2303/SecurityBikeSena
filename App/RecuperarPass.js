@@ -16,13 +16,52 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import enviroment from "./enviroment";
 
-export default function Login({ navigation }) {
+export default function RecuperarPass({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [mensaje, setMensaje] = useState("");
+
+  const recuperar = async () => {
+    if (email != undefined && email.split(" ").join() == "") {
+        setModalVisible(true);
+        setMensaje("El Email no puede estar vacío");
+        return;
+      }
+      if (pass != undefined && pass.split(" ").join() == "") {
+        setModalVisible(true);
+        setMensaje("La contraseña no puede estar vacía");
+        return;
+      }
+
+      setModalVisible(true);
+      setMensaje("Consultando información ..");
+
+      let response = await fetch(enviroment().ipBase + "/user/", {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          pass: pass
+        }),
+      });
+  
+      let json = await response.json();
+        setModalVisible(false);
+        if (json.statusCode == "INTERNAL_SERVER_ERROR") {
+          setModalVisible(true);
+          setMensaje(json.message);
+        } else {
+          setModalVisible(true);
+          setMensaje("Contraseña actualizada correctamente, por favor inicie sesión");
+        }
+  }
+
 
   const styles = StyleSheet.create({
     titulo: {
@@ -90,41 +129,6 @@ export default function Login({ navigation }) {
     },
   });
 
-  const validateUser = async () => {
-    try {
-      
-      if (email != undefined && email.split(" ").join() == "") {
-        setModalVisible(true);
-        setMensaje("El Email no puede estar vacío");
-        return;
-      }
-      if (pass != undefined && pass.split(" ").join() == "") {
-        setModalVisible(true);
-        setMensaje("La contraseña no puede estar vacía");
-        return;
-      }
-
-      setModalVisible(true);
-      setMensaje("Consultando información ..");
-      console.log("--> "+enviroment().ipBase+"/user/"+email+"/"+pass )
-      let response = await fetch(
-        enviroment().ipBase+"/user/"+email+"/"+pass 
-      );
-      let json = await response.json();
-      setModalVisible(false);
-      if (json.statusCode == "INTERNAL_SERVER_ERROR") {
-        setModalVisible(true);
-        setMensaje(json.message);
-      } else {
-        navigation.navigate("Mapa");
-      }
-
-    } catch (error) {
-        setModalVisible(true);
-        setMensaje(error);
-    }
-  };
-
   return (
     <SafeAreaView
       style={{
@@ -152,27 +156,52 @@ export default function Login({ navigation }) {
           </View>
         </Modal>
 
-        <Image
-          style={{
-            width: windowWidth,
-            height: windowHeight * 0.6,
-            backgroundColor: "white",
-          }}
-          resizeMode="cover"
-          source={require("./assets/headLogin.png")}
-        />
-
         <View
           style={{
             width: windowWidth,
-            height: windowHeight * 0.48,
-            backgroundColor: "white",
+            height: windowHeight,
+            backgroundColor: "#09a7b5",
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <Text style={styles.titulo}>BIENVENIDO</Text>
+          <View
+            style={{
+              width: windowWidth * 0.85,
+              height: windowHeight * 0.6,
+              backgroundColor: "white",
+              borderRadius: 30,
+              padding: 50,
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                color: "#e2571a",
+                fontSize: 30,
+                width: 200,
+                textAlign: "center",
+                fontWeight: "bold",
+                marginBottom: 20
+              }}
+            >
+              Recuperar Contraseña
+            </Text>
 
-          <View style={styles.searchSection}>
+            <Text
+              style={{
+                color: "#aaa",
+                fontSize: 17,
+                width: 280,
+                textAlign: "center",
+                marginBottom: 20
+              }}
+            >
+              Por favor ingresa el correo electrónico con el cual realizaste tu registro, y despúes ingresa tu nueva contraseña
+            </Text>
+
+
+            <View style={styles.searchSection}>
             <Icon
               style={styles.searchIcon}
               name="envelope"
@@ -204,11 +233,8 @@ export default function Login({ navigation }) {
             />
           </View>
           <View>
-            <CheckBox title={"Deseo recordar mis datos"} />
-          </View>
-          <View>
             <Button
-              title="Iniciar Sesión"
+              title="Recuperar"
               buttonStyle={{
                 backgroundColor: "#09a7b5",
                 color: "white",
@@ -217,28 +243,10 @@ export default function Login({ navigation }) {
                 height: 50,
                 marginBottom: 10,
               }}
-              onPress={validateUser}
+              onPress={recuperar}
             />
           </View>
-          <View style={{ marginBottom: 5, marginTop: 10 }}>
-            <Text>
-              Aún no estoy registrado,
-              <Text
-                style={{ color: "#e77340" }}
-                onPress={() => navigation.navigate("Registro")}
-              > Registrarme
-              </Text>
-              
-            </Text>
 
-            <Text>
-              He Olvidado mi contraseña,
-              <Text
-                style={{ color: "#e77340" }}
-                onPress={() => navigation.navigate("RecuperarPass")}
-              > Recuperar </Text>
-              
-            </Text>
           </View>
         </View>
       </ScrollView>
